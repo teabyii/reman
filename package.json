@@ -1,0 +1,57 @@
+{
+  "name": "reman",
+  "version": "0.1.0",
+  "description": "A easy & pocket State Handler with React Context instead of Redux",
+  "keywords": [
+    "react",
+    "hooks",
+    "context",
+    "redux",
+    "flux",
+    "state"
+  ],
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest --coverage -u && yarn lint",
+    "coverage": "cat coverage/lcov.info | coveralls",
+    "lint": "eslint --ext .js,.ts src --fix",
+    "prepare": "yarn build"
+  },
+  "author": "teabyii <teabyii@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@commitlint/cli": "^8.2.0",
+    "@commitlint/config-conventional": "^8.2.0",
+    "@types/jest": "^24.0.20",
+    "@types/react": "^16.9.11",
+    "@typescript-eslint/eslint-plugin": "^2.5.0",
+    "@typescript-eslint/parser": "^2.5.0",
+    "eslint": "^6.6.0",
+    "eslint-config-prettier": "^6.4.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-react": "^7.16.0",
+    "husky": "^3.0.9",
+    "jest": "^24.9.0",
+    "lint-staged": "^9.4.2",
+    "prettier": "^1.18.2",
+    "ts-jest": "^24.1.0",
+    "typescript": "^3.6.4"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,js}": [
+      "eslint --fix",
+      "git add"
+    ]
+  }
+}
