@@ -1,7 +1,12 @@
 import React, { ReactNode, useContext } from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { act } from 'react-dom/test-utils';
-import Provider, { createContext } from './index';
+import { renderHook, act as actHook } from '@testing-library/react-hooks';
+import Provider, {
+  createContext,
+  useEnhancedReducer,
+  providers
+} from './index';
 
 let container: HTMLDivElement;
 
@@ -30,6 +35,8 @@ function Root(props: { children: ReactNode }) {
 
 test('base', () => {
   const context = createContext(storePrototype);
+  expect(providers.length).toBe(1);
+
   function Case() {
     const { state, dispatch } = useContext(context);
     return (
@@ -61,4 +68,26 @@ test('base', () => {
   expect(container.querySelector('[data-testid="divide"]')!.textContent).toBe(
     '3'
   );
+});
+
+test('useEnhancedReducer', () => {
+  const { result } = renderHook(() =>
+    useEnhancedReducer(storePrototype.state, storePrototype.reducers)
+  );
+
+  expect(result.current[0].count).toBe(1);
+  expect(typeof result.current[1].set).toBe('function');
+  actHook(() => {
+    result.current[1].set({ count: 4 });
+  });
+  expect(result.current[0].count).toBe(4);
+});
+
+test('meaningless reducers', () => {
+  const { result } = renderHook(() =>
+    useEnhancedReducer({}, { meaninglessValue: 1 } as any)
+  );
+  expect(() => {
+    result.current[1].meaninglessValue();
+  }).not.toThrow();
 });
