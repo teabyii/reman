@@ -91,3 +91,31 @@ test('meaningless reducers', () => {
     result.current[1].meaninglessValue();
   }).not.toThrow();
 });
+
+test('middlewares', () => {
+  const first = jest.fn();
+  const second = jest.fn();
+  const middlewares = [
+    (getState: any) => (next: any) => (action: any) => {
+      first(getState());
+      const result = next(action);
+      second(getState());
+      return result;
+    }
+  ];
+  const { result } = renderHook(() =>
+    useEnhancedReducer(
+      storePrototype.state,
+      storePrototype.reducers,
+      middlewares
+    )
+  );
+  actHook(() => {
+    result.current[1].set({ count: 4 });
+  });
+  expect(first).toHaveBeenCalledBefore(second);
+  expect(first.mock.calls.length).toBe(1);
+  expect(first.mock.calls[0][0].count).toBe(1);
+  expect(second.mock.calls.length).toBe(1);
+  expect(second.mock.calls[0][0].count).toBe(4);
+});
