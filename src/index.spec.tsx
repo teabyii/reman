@@ -8,6 +8,8 @@ import Provider, {
   providers
 } from './index';
 
+jest.useFakeTimers();
+
 let container: HTMLDivElement;
 
 beforeEach(() => {
@@ -118,4 +120,62 @@ test('middlewares', () => {
   expect(first.mock.calls[0][0].count).toBe(1);
   expect(second.mock.calls.length).toBe(1);
   expect(second.mock.calls[0][0].count).toBe(4);
+});
+
+test('empty middlewares', () => {
+  const { result } = renderHook(() =>
+    useEnhancedReducer(storePrototype.state, storePrototype.reducers, [])
+  );
+  actHook(() => {
+    result.current[1].set({ count: 5 });
+  });
+  expect(result.current[0].count).toBe(5);
+});
+
+test('async', () => {
+  const d = jest.fn();
+  const c = jest.fn();
+  const middlewares = [
+    () => (next: any) => (action: any) => {
+      if (!action.payload || !action.payload.delay) {
+        return next(action);
+      }
+      const tid = setTimeout(() => next(action), action.payload.delay);
+      return () => {
+        d();
+        clearTimeout(tid);
+      };
+    },
+    () => (next: any) => (action: any) => {
+      c(action);
+      return next(action);
+    }
+  ];
+  const { result } = renderHook(() =>
+    useEnhancedReducer(
+      storePrototype.state,
+      {
+        set(state, payload: { count: number; delay?: number }) {
+          return { ...state, count: payload.count };
+        },
+        more(state) {
+          return { ...state, count: state.count + 1 };
+        }
+      },
+      middlewares
+    )
+  );
+  actHook(() => {
+    result.current[1].more();
+  });
+  expect(result.current[0].count).toBe(2);
+  actHook(() => {
+    const cancel = result.current[1].more({ delay: 1000 });
+    result.current[1].set({ count: 3 });
+    jest.runAllTimers();
+    cancel();
+  });
+  expect(result.current[0].count).toBe(4);
+  expect(d.mock.calls.length).toBe(1);
+  expect(c.mock.calls.length).toBe(3);
 });

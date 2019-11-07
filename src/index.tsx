@@ -9,7 +9,7 @@ export interface Action {
   payload?: any;
 }
 export interface Dispatch {
-  (action: Action): Dispatch;
+  (action: Action): any;
 }
 export interface Middleware<T> {
   (getState: () => T): (next: Dispatch) => Dispatch;
@@ -23,7 +23,7 @@ export type PickPayload<T> = T extends (state: any, payload: infer P) => any
   ? P
   : never;
 export type Dispatcher<K> = {
-  [P in keyof K]: (payload?: PickPayload<K[P]>) => void;
+  [P in keyof K]: (payload?: PickPayload<K[P]>) => any;
 };
 export interface Store<T, K extends Reducers<T>> {
   state: T;
@@ -82,7 +82,7 @@ export function useEnhancedReducer<T, K extends Reducers<T>>(
   maybe.state = state;
   const target = React.useMemo(() => {
     let newDispatch = dispatch;
-    if (middlewares && middlewares.length) {
+    if (middlewares) {
       const chain = middlewares.map(n => n(() => maybe.state));
       newDispatch = compose(...chain)(dispatch);
     }
