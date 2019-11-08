@@ -4,7 +4,8 @@ A easy & pocket State Handler with React Context instead of Redux
 
 ## TODO
 
-- [ ] middleware
-- [ ] connect
+- [x] middleware
+- [x] connect
 - [ ] devtool
-- [ ] test
+- [x] test
+- [ ] docs

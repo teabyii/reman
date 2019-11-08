@@ -1,4 +1,12 @@
-import React, { Context, FunctionComponent, ReactNode } from 'react';
+import React, {
+  Context,
+  FunctionComponent,
+  ReactNode,
+  useMemo,
+  useReducer,
+  memo
+} from 'react';
+import hoistStatics from 'hoist-non-react-statics';
 
 export type Reducer<T> = (state: T, payload?: any) => T;
 export interface Reducers<T> {
@@ -36,6 +44,10 @@ export interface CreateContextOptions<T, K extends Reducers<T>>
   extends ContextOptions<T, K> {
   context: Context<Store<T, K>>;
 }
+export interface ConnectOptions<T> {
+  areEqual?: (prevProps: T, nextProps: T) => boolean;
+  forwardRef?: boolean;
+}
 
 export const providers: FunctionComponent[] = [];
 
@@ -68,7 +80,7 @@ export function useEnhancedReducer<T, K extends Reducers<T>>(
 ): [T, Dispatcher<K>] {
   // trick for middleware to get state
   const maybe = { state: initialState };
-  const reducer = React.useMemo(() => {
+  const reducer = useMemo(() => {
     return (state: T, action: Action) => {
       const fn = reducers[action.type];
       let result = state;
@@ -78,9 +90,9 @@ export function useEnhancedReducer<T, K extends Reducers<T>>(
     };
   }, [reducers]);
 
-  const [state, dispatch] = React.useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState);
   maybe.state = state;
-  const target = React.useMemo(() => {
+  const target = useMemo(() => {
     let newDispatch = dispatch;
     if (middlewares) {
       const chain = middlewares.map(n => n(() => maybe.state));
@@ -125,4 +137,32 @@ export function createContext<T, K extends Reducers<T>>(
   }) as Context<Store<T, K>>;
   providers.push(createProvider({ context, state, reducers }));
   return context;
+}
+
+export function connect<M = any, N = any, T extends Props = any>(
+  useContext: (props?: T) => [M, N],
+  options?: ConnectOptions<M & N & T>
+) {
+  return (Component: FunctionComponent<M & N & T>) => {
+    const { areEqual, forwardRef } = options || {};
+    const Memorized = memo(Component, areEqual);
+
+    const Connected = function(props: T, ref: any) {
+      const [state, dispatcher] = useContext();
+      return (
+        <Memorized {...props} {...state} {...dispatcher} ref={ref}>
+          {props.children}
+        </Memorized>
+      );
+    };
+    Connected.displayName = `Connected(${Component.displayName ||
+      Component.name})`;
+
+    if (forwardRef) {
+      const Forwarded = React.forwardRef(Connected);
+      return hoistStatics(Forwarded, Component);
+    }
+
+    return hoistStatics(Connected, Component);
+  };
 }
