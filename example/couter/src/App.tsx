@@ -4,7 +4,7 @@ import Result from './components/Result';
 import Input from './components/Input';
 import Increase from './components/Increase';
 import Decrease from './components/Decrease';
-import Provider from 'reable';
+import Provider from 'reman';
 
 function App() {
   return (

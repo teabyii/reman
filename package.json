@@ -1,6 +1,6 @@
 {
   "name": "reman",
-  "version": "0.1.0",
+  "version": "1.0.0-alpha",
   "description": "A easy & pocket State Handler with React Context instead of Redux",
   "keywords": [
     "react",
@@ -56,7 +56,7 @@
     }
   },
   "lint-staged": {
-    "*.{ts,js}": [
+    "src/**/*.{ts,js}": [
       "eslint --fix",
       "git add"
     ]

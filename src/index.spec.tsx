@@ -3,7 +3,6 @@ import React, {
   useContext,
   useImperativeHandle,
   useRef,
-  RefForwardingComponent,
   forwardRef
 } from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
@@ -205,30 +204,28 @@ test('connect', () => {
     const { state, dispatch } = useContext(context);
     return [{ count: state.count }, { set: dispatch.set }];
   };
-  const Case: RefForwardingComponent<RefHandlers, any> = forwardRef(
-    (props: any, ref) => {
-      const { init, count, set, onClick } = props;
-      d();
-      useImperativeHandle(ref, () => ({
-        test(input: number) {
-          c(input);
-        }
-      }));
+  const Case = forwardRef<RefHandlers, any>((props: any, ref) => {
+    const { init, count, set, onClick } = props;
+    d();
+    useImperativeHandle(ref, () => ({
+      test(input: number) {
+        c(input);
+      }
+    }));
 
-      return (
-        <>
-          <div data-testid="initial">{init}</div>
-          <div data-testid="divide">{count}</div>
-          <button data-testid="button" onClick={() => set({ count: 3 })}>
-            点击
-          </button>
-          <button data-testid="ref" onClick={onClick}>
-            点击
-          </button>
-        </>
-      );
-    }
-  );
+    return (
+      <>
+        <div data-testid="initial">{init}</div>
+        <div data-testid="divide">{count}</div>
+        <button data-testid="button" onClick={() => set({ count: 3 })}>
+          点击
+        </button>
+        <button data-testid="ref" onClick={onClick}>
+          点击
+        </button>
+      </>
+    );
+  });
   // Case.staticPropTest = true;
   const ConnectedCase = connect(
     useCustomizedContext,
