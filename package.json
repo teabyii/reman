@@ -14,8 +14,9 @@
   "scripts": {
     "build": "tsc",
     "test": "jest --coverage -u && yarn lint",
+    "jest:clear": "jest --clearCache",
     "coverage": "cat coverage/lcov.info | coveralls",
-    "lint": "eslint --ext .js,.ts src/* --fix",
+    "lint": "eslint --ext .ts,.tsx \"src/**/*\" \"test/**/*\" --fix",
     "prepare": "yarn build"
   },
   "author": "teabyii <teabyii@gmail.com>",
@@ -46,7 +47,11 @@
   "jest": {
     "preset": "ts-jest",
     "testPathIgnorePatterns": [
-      "/lib/"
+      "/node_modules/",
+      "<rootDir>/lib/"
+    ],
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/test/__fixtures__/"
     ]
   },
   "husky": {
