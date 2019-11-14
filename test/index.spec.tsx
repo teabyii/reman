@@ -20,7 +20,17 @@ afterEach(() => {
 });
 
 test('base', () => {
-  const context = createContext(storePrototype);
+  const middlewareCall = jest.fn();
+  const context = createContext({
+    ...storePrototype,
+    middlewares: [
+      () => (next: any) => (action: any) => {
+        middlewareCall(action);
+        const result = next(action);
+        return result;
+      }
+    ]
+  });
   expect(providers.length).toBe(1);
 
   function Case() {
@@ -54,4 +64,7 @@ test('base', () => {
   expect(container.querySelector('[data-testid="divide"]')!.textContent).toBe(
     '3'
   );
+  expect(middlewareCall.mock.calls.length).toBe(1);
+  expect(middlewareCall.mock.calls[0][0].type).toBe('set');
+  expect(middlewareCall.mock.calls[0][0].payload.count).toBe(3);
 });

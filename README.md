@@ -96,12 +96,19 @@ First, clone repo and use `yarn` to install deps for testing.
 yarn test # test 
 ```
 
+## Thanks
+
+- [Redux](redux-url)
+- [Rematch](rematch-url)
+- [Reinspect](reinspect-url)
+- [Redux DevTools without Redux](redux-devtools-without-redux-url)
+
 ## TODO
 
 - [x] test
 - [x] middleware
 - [x] connect
-- [ ] devtool
+- [x] devtool
 - [ ] async/effect
 - [ ] component state injector
 
@@ -117,4 +124,7 @@ Reman is published under the MIT license. See LICENSE for more information.
 [coverage-badge]: http://img.shields.io/coveralls/teabyii/reman.svg?style=flat
 [commitizen-url]: http://commitizen.github.io/cz-cli/
 [commitizen-badge]: https://img.shields.io/badge/commitizen-friendly-brightgreen.svg?style=flat
+[redux-url]: https://github.com/reduxjs/redux
 [rematch-url]: https://rematch.github.io/rematch/#
+[redux-devtools-without-redux-url]: https://medium.com/@zalmoxis/redux-devtools-without-redux-or-how-to-have-a-predictable-state-with-any-architecture-61c5f5a7716f
+[reinspect-url](https://github.com/troch/reinspect)

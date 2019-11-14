@@ -15,6 +15,7 @@ export interface Middleware<T> {
   (getState: () => T): (next: Dispatch) => Dispatch;
 }
 export interface ContextOptions<T, K extends Reducers<T>> {
+  name?: string;
   state: T;
   reducers: K;
   middlewares?: Middleware<T>[];
@@ -26,6 +27,7 @@ export type Dispatcher<K> = {
   [P in keyof K]: (payload?: PickPayload<K[P]>) => any;
 };
 export interface Store<T, K extends Reducers<T>> {
+  name: string;
   state: T;
   dispatch: Dispatcher<K>;
 }
@@ -40,4 +42,7 @@ export interface CreateContextOptions<T, K extends Reducers<T>>
 export interface ConnectOptions<T> {
   areEqual?: (prevProps: Readonly<T>, nextProps: Readonly<T>) => boolean;
   forwardRef?: boolean;
+}
+export interface GlobalData {
+  middlewares: Middleware<any>[];
 }
