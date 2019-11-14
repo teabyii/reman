@@ -1,14 +1,15 @@
 import React, { Context } from 'react';
 import { providers, createProvider } from './provider';
 import { Reducers, ContextOptions, Store } from './types';
+import __GLOBAL_DATA__ from './global';
 
-let __INCREASE_ID__ = 0;
+let __CONTEXT_ID__ = 0;
 
 export function createContext<T, K extends Reducers<T>>(
   options: ContextOptions<T, K>
 ) {
   const {
-    name = `@@${__INCREASE_ID__++}`,
+    name = `$$${__CONTEXT_ID__++}`,
     state,
     reducers,
     middlewares
@@ -18,6 +19,10 @@ export function createContext<T, K extends Reducers<T>>(
     state,
     dispatch: {} as any
   }) as Context<Store<T, K>>;
-  providers.push(createProvider({ context, state, reducers, middlewares }));
+  context.displayName = name;
+  __GLOBAL_DATA__.contexts[name] = { ...state };
+  providers.push(
+    createProvider({ name, context, state, reducers, middlewares })
+  );
   return context;
 }

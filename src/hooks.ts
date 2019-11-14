@@ -1,20 +1,6 @@
 import { useMemo, useReducer } from 'react';
-import { Reducers, Dispatcher, Middleware, Action, GlobalData } from './types';
-
-export const __GLOBAL_DATA__: GlobalData = {
-  middlewares: []
-};
-
-export function applyGlobalMiddleware(middleware: Middleware<any>) {
-  __GLOBAL_DATA__.middlewares = [...__GLOBAL_DATA__.middlewares, middleware];
-}
-
-export function cancelGlobalMiddleware(middleware: Middleware<any>) {
-  const { middlewares } = __GLOBAL_DATA__;
-  const index = middlewares.findIndex(m => m === middleware);
-  middlewares.splice(index, 0);
-  __GLOBAL_DATA__.middlewares = [...middlewares];
-}
+import { Reducers, Dispatcher, Middleware, Action } from './types';
+import __GLOBAL_DATA__ from './global';
 
 // https://github.com/reduxjs/redux/blob/master/src/compose.ts#L46
 export function compose(...funcs: Function[]) {
@@ -30,6 +16,7 @@ export function compose(...funcs: Function[]) {
 }
 
 export function useEnhancedReducer<T, K extends Reducers<T>>(
+  contextName: string,
   initialState: T,
   reducers: K,
   middlewares?: Middleware<T>[]
@@ -54,7 +41,9 @@ export function useEnhancedReducer<T, K extends Reducers<T>>(
       ...__GLOBAL_DATA__.middlewares,
       ...(middlewares || [])
     ];
-    const chain = appliedMiddlewares.map(n => n(() => maybe.state));
+    const chain = appliedMiddlewares.map(n =>
+      n(() => maybe.state, contextName)
+    );
     newDispatch = compose(...chain)(dispatch);
 
     return Object.keys(reducers).reduce(

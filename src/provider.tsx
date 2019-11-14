@@ -18,6 +18,7 @@ export function createProvider<T, K extends Reducers<T>>(
 ): FunctionComponent {
   return function(props: Props) {
     const [state, dispatch] = useEnhancedReducer(
+      options.name,
       options.state,
       options.reducers,
       options.middlewares

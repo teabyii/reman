@@ -12,7 +12,7 @@ export interface Dispatch {
   (action: Action): any;
 }
 export interface Middleware<T> {
-  (getState: () => T): (next: Dispatch) => Dispatch;
+  (getState: () => T, contextName: string): (next: Dispatch) => Dispatch;
 }
 export interface ContextOptions<T, K extends Reducers<T>> {
   name?: string;
@@ -27,7 +27,7 @@ export type Dispatcher<K> = {
   [P in keyof K]: (payload?: PickPayload<K[P]>) => any;
 };
 export interface Store<T, K extends Reducers<T>> {
-  name: string;
+  name?: string;
   state: T;
   dispatch: Dispatcher<K>;
 }
@@ -37,6 +37,7 @@ export interface Props {
 }
 export interface CreateContextOptions<T, K extends Reducers<T>>
   extends ContextOptions<T, K> {
+  name: string;
   context: Context<Store<T, K>>;
 }
 export interface ConnectOptions<T> {
@@ -44,5 +45,6 @@ export interface ConnectOptions<T> {
   forwardRef?: boolean;
 }
 export interface GlobalData {
+  contexts: Record<string, any>;
   middlewares: Middleware<any>[];
 }

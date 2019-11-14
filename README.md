@@ -17,7 +17,7 @@ yarn add reman
 
 ## Getting Started
 
-First of all, **Reman** is built with react hooks in react@16.8, it works wonderfully for the `Function Component`, but not good for `Class Component`.
+First of all, **Reman** is built with react hooks in react@16.8, it works wonderfully for the `Function Component`, but not good for `Class Component`. However, you can use `Reman.connect` to adapt `Class Component`.
 
 In **Reman**, we use `context` to replace `store` in redux, and make up **reducers** just like [rematch](rematch-url), in the same time, you should organize business data with serveral contexts instead of the only one store.
 

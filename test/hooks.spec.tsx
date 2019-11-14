@@ -4,9 +4,15 @@ import { storePrototype } from './__fixtures__/base';
 
 jest.useFakeTimers();
 
+const fakeContextName = '$$0';
+
 test('useEnhancedReducer', () => {
   const { result } = renderHook(() =>
-    useEnhancedReducer(storePrototype.state, storePrototype.reducers)
+    useEnhancedReducer(
+      fakeContextName,
+      storePrototype.state,
+      storePrototype.reducers
+    )
   );
 
   expect(result.current[0].count).toBe(1);
@@ -19,7 +25,7 @@ test('useEnhancedReducer', () => {
 
 test('meaningless reducers', () => {
   const { result } = renderHook(() =>
-    useEnhancedReducer({}, { meaninglessValue: 1 } as any)
+    useEnhancedReducer(fakeContextName, {}, { meaninglessValue: 1 } as any)
   );
   expect(() => {
     result.current[1].meaninglessValue();
@@ -40,6 +46,7 @@ test('middlewares', () => {
   ];
   const { result } = renderHook(() =>
     useEnhancedReducer(
+      fakeContextName,
       storePrototype.state,
       storePrototype.reducers,
       middlewares
@@ -58,7 +65,12 @@ test('middlewares', () => {
 
 test('empty middlewares', () => {
   const { result } = renderHook(() =>
-    useEnhancedReducer(storePrototype.state, storePrototype.reducers, [])
+    useEnhancedReducer(
+      fakeContextName,
+      storePrototype.state,
+      storePrototype.reducers,
+      []
+    )
   );
   act(() => {
     result.current[1].set({ count: 5 });
@@ -87,6 +99,7 @@ test('async', () => {
   ];
   const { result } = renderHook(() =>
     useEnhancedReducer(
+      fakeContextName,
       storePrototype.state,
       {
         set(state, payload: { count: number; delay?: number }) {
