@@ -19,11 +19,11 @@ yarn add reman
 
 First of all, **Reman** is built with react hooks in react@16.8, it works wonderfully for the `Function Component`, but not good for `Class Component`. However, you can use `Reman.connect` to adapt `Class Component`.
 
-In **Reman**, we use `context` to replace `store` in redux, and make up **reducers** just like [rematch](rematch-url), in the same time, you should organize business data with serveral contexts instead of the only one store.
+In **Reman**, we use `context` to replace `store` in redux, and make up **reducers** just like [rematch][rematch-url], in the same time, you should organize business data with serveral contexts instead of the only one store.
 
 ### Step 1: Create context
 
-A little like [Rematch](rematch-url), the **Context** brings together state, reducers, middlewares in one place. You just create context, and it works automatically.
+A little like [Rematch][rematch-url], the **Context** brings together state, reducers, middlewares in one place. You just create context, and it works automatically.
 
 ```ts
 import { createContext } from 'reman'
@@ -73,7 +73,7 @@ import context from './context'
 
 export default function App() {
   // use state & dispatch in context
-  const [state, dispatch] = useContext(context)
+  const { state, dispatch } = useContext(context)
 
   return (
     <div>
@@ -98,10 +98,10 @@ yarn test # test
 
 ## Thanks
 
-- [Redux](redux-url)
-- [Rematch](rematch-url)
-- [Reinspect](reinspect-url)
-- [Redux DevTools without Redux](redux-devtools-without-redux-url)
+- [Redux][redux-url]
+- [Rematch][rematch-url]
+- [Reinspect][reinspect-url]
+- [Redux DevTools without Redux][redux-devtools-without-redux-url]
 
 ## TODO
 
@@ -127,4 +127,4 @@ Reman is published under the MIT license. See LICENSE for more information.
 [redux-url]: https://github.com/reduxjs/redux
 [rematch-url]: https://rematch.github.io/rematch/#
 [redux-devtools-without-redux-url]: https://medium.com/@zalmoxis/redux-devtools-without-redux-or-how-to-have-a-predictable-state-with-any-architecture-61c5f5a7716f
-[reinspect-url](https://github.com/troch/reinspect)
+[reinspect-url]: https://github.com/troch/reinspect

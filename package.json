@@ -1,6 +1,6 @@
 {
   "name": "reman",
-  "version": "1.0.0-alpha",
+  "version": "1.0.0-alpha.1",
   "description": "A easy & pocket State Handler with React Context instead of Redux",
   "keywords": [
     "react",
