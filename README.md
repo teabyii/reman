@@ -78,7 +78,7 @@ export default function App() {
   return (
     <div>
       <span>{state.count}</span>
-      <button onClick={() => dispatch.increase()}>点击增加</button>
+      <button onClick={() => dispatch.increase()}>ADD MORE</button>
     </div>
   )
 }
@@ -102,6 +102,7 @@ yarn test # test
 - [x] middleware
 - [x] connect
 - [ ] devtool
+- [ ] async/effect
 - [ ] component state injector
 
 ## License
