@@ -31,12 +31,13 @@ export interface Store<T, K extends Reducers<T>> {
 }
 export interface Props {
   children?: ReactNode;
+  key?: string;
 }
 export interface CreateContextOptions<T, K extends Reducers<T>>
   extends ContextOptions<T, K> {
   context: Context<Store<T, K>>;
 }
 export interface ConnectOptions<T> {
-  areEqual?: (prevProps: T, nextProps: T) => boolean;
+  areEqual?: (prevProps: Readonly<T>, nextProps: Readonly<T>) => boolean;
   forwardRef?: boolean;
 }
