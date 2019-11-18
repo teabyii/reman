@@ -22,12 +22,12 @@ test('function component', () => {
   const context = createContext(storePrototype);
   const renderCount = jest.fn();
   const refCallCount = jest.fn();
-  const useCustomizedContext = function(): [
-    { count: number },
-    { set: (payload: { count: number }) => void }
-  ] {
+  const useCustomizedContext = function() {
     const { state, dispatch } = useContext(context);
-    return [{ count: state.count }, { set: dispatch.set }];
+    return {
+      count: state.count,
+      set: dispatch.set
+    };
   };
   const Case = forwardRef<RefHandlers, any>((props: any, ref) => {
     const { init, count, set, onClick } = props;
@@ -109,7 +109,7 @@ test('no forward', () => {
   );
   const ConnectedCase = connect(() => {
     const { state } = useContext(context);
-    return [{ count: state.count }];
+    return { count: state.count };
   })(Case);
 
   act(() => {
@@ -160,7 +160,7 @@ test('class component', () => {
   const ConnectedCase = connect(
     () => {
       const { state, dispatch } = useContext(context);
-      return [{ count: state.count }, { set: dispatch.set }];
+      return { count: state.count, set: dispatch.set };
     },
     {
       forwardRef: true
