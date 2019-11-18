@@ -1,25 +1,16 @@
 import React, { useContext } from 'react';
-import { render, unmountComponentAtNode } from 'react-dom';
+import { render } from 'react-dom';
 import { act } from 'react-dom/test-utils';
 import { storePrototype, Root } from './__fixtures__/base';
 import { createContext } from '../src/index';
 import { providers } from '../src/provider';
+import setup, { getContainer } from './__fixtures__/setup';
 
 jest.useFakeTimers();
-
-let container: HTMLDivElement;
-
-beforeEach(() => {
-  container = document.createElement('div');
-  document.body.appendChild(container);
-});
-
-afterEach(() => {
-  unmountComponentAtNode(container);
-  container.remove();
-});
+setup();
 
 test('base', () => {
+  const container = getContainer();
   const middlewareCall = jest.fn();
   const context = createContext({
     ...storePrototype,

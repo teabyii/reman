@@ -3,7 +3,6 @@ import { useEnhancedReducer } from '../src/hooks';
 import { storePrototype } from './__fixtures__/base';
 
 jest.useFakeTimers();
-
 const fakeContextName = '$$0';
 
 test('useEnhancedReducer', () => {

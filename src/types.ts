@@ -1,5 +1,17 @@
 import { ReactNode, Context } from 'react';
 
+declare global {
+  interface Window {
+    devToolsExtension?: DevtoolsExtension;
+  }
+}
+interface DevtoolsExtension {
+  connect: (options: any) => Devtools;
+}
+interface Devtools {
+  init: (state: any) => void;
+  send: (action: Action, state: any) => void;
+}
 export type Reducer<T> = (state: T, payload?: any) => T;
 export interface Reducers<T> {
   [key: string]: Reducer<T>;

@@ -6,4 +6,5 @@ export { connect } from './connect';
 export { applyGlobalMiddleware, cancelGlobalMiddleware } from './global';
 
 // devtools support
-import './devtools';
+import initDevtools from './devtools';
+initDevtools();

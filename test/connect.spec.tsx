@@ -5,29 +5,20 @@ import React, {
   forwardRef,
   Component
 } from 'react';
-import { render, unmountComponentAtNode } from 'react-dom';
+import { render } from 'react-dom';
 import { createContext } from '../src/context';
 import { connect } from '../src/connect';
 import { storePrototype, Root } from './__fixtures__/base';
 import { act } from 'react-dom/test-utils';
+import setup, { getContainer } from './__fixtures__/setup';
 
 export interface RefHandlers {
   set: (i: number) => void;
 }
 
-let container: HTMLDivElement;
-
-beforeEach(() => {
-  container = document.createElement('div');
-  document.body.appendChild(container);
-});
-
-afterEach(() => {
-  unmountComponentAtNode(container);
-  container.remove();
-});
-
+setup();
 test('function component', () => {
+  const container = getContainer();
   const context = createContext(storePrototype);
   const renderCount = jest.fn();
   const refCallCount = jest.fn();
@@ -111,6 +102,7 @@ test('function component', () => {
 });
 
 test('no forward', () => {
+  const container = getContainer();
   const context = createContext(storePrototype);
   const Case = (props: { count: number }) => (
     <div data-testid="divide">{props.count}</div>
@@ -135,6 +127,7 @@ test('no forward', () => {
 });
 
 test('class component', () => {
+  const container = getContainer();
   const renderCount = jest.fn();
   const refCallCount = jest.fn();
   class Case extends Component<any> {
