@@ -1,6 +1,6 @@
 {
   "name": "reman",
-  "version": "1.0.0-alpha.3",
+  "version": "1.0.0-alpha.4",
   "description": "A easy & pocket State Handler with React Context instead of Redux",
   "keywords": [
     "react",
@@ -67,7 +67,6 @@
     ]
   },
   "dependencies": {
-    "hoist-non-react-statics": "^3.3.0",
-    "react": "^16.11.0"
+    "hoist-non-react-statics": "^3.3.0"
   }
 }
