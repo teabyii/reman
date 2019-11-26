@@ -109,7 +109,6 @@ yarn test # test
 - [x] middleware
 - [x] connect
 - [x] devtool
-- [ ] async/effect
 - [ ] component state injector
 
 ## License
