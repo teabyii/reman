@@ -211,3 +211,25 @@ test('class component', () => {
     '10'
   );
 });
+
+interface UIProps {
+  data: string[];
+}
+
+test('pass props', () => {
+  const Component = connect((props: { id: number }) => {
+    return { data: [`id-${props.id}`] };
+  })(function(props: UIProps) {
+    if (!props.data.length) return null;
+    return <div data-testid="divide">{props.data[0]}</div>;
+  });
+
+  const container = getContainer();
+  act(() => {
+    render(<Component id={1} />, container);
+  });
+
+  expect(container.querySelector('[data-testid="divide"]')!.textContent).toBe(
+    'id-1'
+  );
+});
